@@ -1,0 +1,17 @@
+{
+  "name": "webpack_demo",
+  "version": "1.0.0",
+  "private": true,
+  "main": "index.js",
+  "license": "MIT",
+  "devDependencies": {
+    "webpack": "^4.43.0",
+    "webpack-cli": "^3.3.12",
+    "webpack-dev-server": "^3.10.3"
+  },
+  "scripts": {
+    "build": "webpack",
+    "dev-server": "webpack-dev-server",
+    "start": "webpack-dev-server --inline --progress --port 8080"
+  }
+}
