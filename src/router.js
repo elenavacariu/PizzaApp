@@ -1,17 +1,20 @@
-import { get404Template } from "./404";
-
 import {
-  getRestaurantsTemplate,
   initializeRestaurants,
   getRestaurantDetailsByID,
-  getRestaurantDetails,
 } from "./restaurants/restaurants";
 
-import { getMenuTemplate, getRestaurantMenu } from "./menu/menu";
+import { getRestaurantMenu } from "./menu/menu";
 
 import { getCartTemplate } from "./cartPages/cartpages";
 
 import { getOrdersTemplate } from "./listOfOrders/listoforders";
+
+import {
+  error404Template,
+  restaurantsTemplate,
+  restaurantDetailsTemplate,
+  menuTemplate,
+} from "./templets.js";
 
 export const route = (event) => {
   event = event || window.event;
@@ -21,10 +24,10 @@ export const route = (event) => {
 };
 
 const routeTemplates = {
-  404: get404Template(),
-  "": getRestaurantsTemplate(),
-  "#restaurant": getRestaurantDetails(),
-  "#menu": getMenuTemplate(),
+  404: error404Template(),
+  "": restaurantsTemplate(),
+  "#restaurant": restaurantDetailsTemplate(),
+  "#menu": menuTemplate(),
   "#cartpages": getCartTemplate(),
   "#listoforders": getOrdersTemplate(),
 };

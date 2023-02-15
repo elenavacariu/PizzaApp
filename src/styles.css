@@ -1,10 +1,6 @@
 html, body {
     font-family: sans-serif;
-    margin: 0;
-    height: 100%;
-    background-image: url("/src/assets/images/pizza.jpg");
-    background-size: cover;
-    background-position: center;
+    background-color: rgba(26, 61, 64, 0.513);
 }
 
 p {
