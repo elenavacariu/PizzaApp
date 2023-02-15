@@ -1,11 +1,6 @@
-html,
-body {
+html, body {
     font-family: sans-serif;
-    margin: 0;
-    height: 100%;
-    background-image: url("./pizza.jpg");
-    background-size: cover;
-    background-position: center;
+    background-color: rgba(26, 61, 64, 0.513);
 }
 
 p {
@@ -76,4 +71,8 @@ hr {
 .socials-card > i {
     font-size: 1.5rem;
     margin-right: 0.5rem;
+}
+
+.main-button{
+ justify-content: center;
 }

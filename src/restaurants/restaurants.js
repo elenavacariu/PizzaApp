@@ -1,23 +1,78 @@
-clickRestaurant = (e) => {
+import { str } from "ajv";
+import { getRestaurantMenu } from "../menu/menu.js";
+import { handleLocation, handleLocationByPath, route } from "../router.js";
+
+export function initializeRestaurants() {
+  getRestaurants();
+}
+
+// export function getRestaurantsTemplate() {
+//   return `<h1>Choose a restaurant</h1>`;
+// }
+
+// export function getRestaurantDetails() {
+//   return `<h1>Restaurant Details</h1>`;
+// }
+
+export function getRestaurantDetailsByID(id) {
   fetch(
-    `https://private-anon-af35c927af-pizzaapp.apiary-mock.com/restaurants/2`,
+    `https://private-anon-7231255228-pizzaapp.apiary-mock.com/restaurants/${id}`,
     {
       method: "GET",
     }
   )
     .then((response) => response.json())
     .then((result) => {
-      if (result == true) {
-        window.location.href = "/dist/index.html";
-        alert("You are in!");
-      } else {
-        //window.location.href = "/dist/index.html";
-        alert("Not bien...");
-      }
-    });
-};
+      let div = document.createElement("div");
 
-function getRestaurants() {
+      const restaurantId = document.createElement("p");
+      restaurantId.innerHTML = "Id: " + result.id;
+      const restaurantName = document.createElement("p");
+      restaurantName.innerHTML = "Name: " + result.name;
+      const restaurantAddress1 = document.createElement("p");
+      restaurantAddress1.innerHTML = "Address1: " + result.address1;
+      const restaurantAddress2 = document.createElement("p");
+      restaurantAddress2.innerHTML = "Address2: " + result.address2;
+      const restaurantLatitude = document.createElement("p");
+      restaurantLatitude.innerHTML = "Latitude: " + result.latitude;
+      const restaurantLongitude = document.createElement("p");
+      restaurantLongitude.innerHTML = "Longitude: " + result.longitude;
+
+      div.appendChild(restaurantId);
+      div.appendChild(restaurantName);
+      div.appendChild(restaurantAddress1);
+      div.appendChild(restaurantAddress2);
+      div.appendChild(restaurantLatitude);
+      div.appendChild(restaurantLongitude);
+      document.getElementById("main").appendChild(div);
+
+      let div2 = document.createElement("div");
+      const button = document.createElement("button");
+      button.type = "button";
+      button.className = "button button";
+      button.innerHTML = "Menu";
+
+      let hasButtonBeenClicked = false;
+
+      //click button only one time
+      button.addEventListener("click", function () {
+        if (!hasButtonBeenClicked) {
+          getRestaurantMenu();
+          hasButtonBeenClicked = true;
+        }
+      });
+
+      div2.appendChild(button);
+      document.getElementById("main").appendChild(div2);
+    });
+}
+
+export function clickRestaurant(e) {
+  let elementId = e.target.id;
+  handleLocationByPath(`#restaurant/${elementId}`);
+}
+
+export function getRestaurants() {
   fetch(
     "http://private-anon-af35c927af-pizzaapp.apiary-mock.com/restaurants/",
     {
@@ -26,77 +81,29 @@ function getRestaurants() {
   )
     .then((response) => response.json())
     .then((result) => {
-      console.log(result);
-      convertJsonToHtml(mockRestaruantsResult());
+      convertJsonToHtml(result);
     });
-
-  //console.log(window.location.hash);
 }
 
-function mockRestaruantsResult() {
-  let mock = [
-    {
-      id: 1,
-      name: "Pizza Heaven",
-      address1: "Kungsgatan 1",
-      address2: "111 43 Stockholm",
-      latitude: 59.336078,
-      longitude: 18.071807,
-    },
-    {
-      id: 2,
-      name: "Pizzeria Apan",
-      address1: "LĂĽngholmsgatan 34",
-      address2: "117 33 Stockholm",
-      latitude: 59.315709,
-      longitude: 18.033507,
-    },
-    {
-      id: 3,
-      name: "Pizzeria Apan",
-      address1: "LĂĽngholmsgatan 34",
-      address2: "117 33 Stockholm",
-      latitude: 59.315709,
-      longitude: 18.033507,
-    },
-    {
-      id: 4,
-      name: "Pizzeria Apan",
-      address1: "LĂĽngholmsgatan 34",
-      address2: "117 33 Stockholm",
-      latitude: 59.315709,
-      longitude: 18.033507,
-    },
-    {
-      id: 5,
-      name: "Pizzeria Apan",
-      address1: "LĂĽngholmsgatan 34",
-      address2: "117 33 Stockholm",
-      latitude: 59.315709,
-      longitude: 18.033507,
-    },
-  ];
-  return mock;
-}
-
-function convertJsonToHtml(restaurants) {
-  div = document.createElement("div");
+export function convertJsonToHtml(restaurants) {
+  let div = document.createElement("div");
   div.className = "main-button";
 
-  for (var i = 0; i < restaurants.length; i++) {
+  restaurants.forEach(function (restaurant, i) {
     if (i > 0) {
-      pre = document.createElement("a");
+      let pre = document.createElement("a");
       pre.className = "a";
       pre.innerHTML = " | ";
       div.appendChild(pre);
     }
 
-    var button = document.createElement("button");
+    const button = document.createElement("button");
     button.type = "button";
     button.className = "button button";
     button.innerHTML = restaurants[i].name;
+    button.id = restaurants[i].id;
     button.addEventListener("click", clickRestaurant);
     div.appendChild(button);
-  }
+  });
   document.getElementById("main").appendChild(div);
 }
