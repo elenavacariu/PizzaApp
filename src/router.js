@@ -1,20 +1,17 @@
 import {
   initializeRestaurants,
   getRestaurantDetailsByID,
+  restaurantDetailsTemplate,
+  restaurantsTemplate,
 } from "./restaurants/restaurants";
 
-import { getRestaurantMenu } from "./menu/menu";
+import { error404Template } from "./404";
+
+import { menuTemplate, getRestaurantMenu } from "./menu/menu";
 
 import { getCartTemplate } from "./cartPages/cartpages";
 
 import { getOrdersTemplate } from "./listOfOrders/listoforders";
-
-import {
-  error404Template,
-  restaurantsTemplate,
-  restaurantDetailsTemplate,
-  menuTemplate,
-} from "./templets.js";
 
 export const route = (event) => {
   event = event || window.event;
