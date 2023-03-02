@@ -1,20 +1,17 @@
 import {
   initializeRestaurants,
   getRestaurantDetailsByID,
+  restaurantDetailsTemplate,
+  getRestaurantsTemplate,
 } from "./restaurants/restaurants";
 
-import { getRestaurantMenu } from "./menu/menu";
+import { error404Template } from "./404";
+
+import { getMenuTemplate, getRestaurantMenu } from "./menu/menu";
 
 import { getCartTemplate } from "./cartPages/cartpages";
 
 import { getOrdersTemplate } from "./listOfOrders/listoforders";
-
-import {
-  error404Template,
-  restaurantsTemplate,
-  restaurantDetailsTemplate,
-  menuTemplate,
-} from "./templets.js";
 
 export const route = (event) => {
   event = event || window.event;
@@ -25,9 +22,9 @@ export const route = (event) => {
 
 const routeTemplates = {
   404: error404Template(),
-  "": restaurantsTemplate(),
+  "": getRestaurantsTemplate(),
   "#restaurant": restaurantDetailsTemplate(),
-  "#menu": menuTemplate(),
+  "#menu": getMenuTemplate(),
   "#cartpages": getCartTemplate(),
   "#listoforders": getOrdersTemplate(),
 };
@@ -56,7 +53,7 @@ export const handleLocationByPath = async (path) => {
       initializeRoutes[path]();
     }
   } else {
-    const hash = "";
+    //const hash = "";
     const html = routeTemplates[""] || routeTemplates[404];
     document.getElementById("main").innerHTML = html;
     initializeRoutes[""]();
