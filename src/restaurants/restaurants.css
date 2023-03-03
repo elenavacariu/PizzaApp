@@ -29,7 +29,7 @@ button{
   margin: 4px 2px;
   transition-duration: 0.4s;
   position: relative;
-  font-size: 22px !important;
+  font-size: 16px !important;
 }
 
 .a{
@@ -42,3 +42,30 @@ button{
   color: black; 
   background-color: transparent;
 }
+
+
+#loader {
+  border: 12px solid #f3f3f3;
+  border-radius: 50%;
+  border-top: 12px solid #444444;
+  width: 40px;
+  height: 40px;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  100% {
+      transform: rotate(360deg);
+  }
+}
+
+.center {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: auto;
+}
+
+
