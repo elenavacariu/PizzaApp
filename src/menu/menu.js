@@ -4,7 +4,7 @@ export function getRestaurantsDetailsTemplate() {
   return `
   <div id="loader" class="center"></div>
   <h1>Restaurant Details</h1>
-  <div>
+  <div class="hide-content">
     <h4 id="name"></h4>
     <h4 id="address1-label" style="display: inline-block;">Address I: </h4>
     <p id="address1" style="display: inline-block;"></p>
@@ -40,31 +40,40 @@ export function getMenuTemplate() {
 }
 
 export function getRestaurantDetailsByID(id) {
-  fetchData(
-    `https://private-anon-7231255228-pizzaapp.apiary-mock.com/restaurants/${id}`
-  )
-    .then((result) => {
-      document.getElementById("name").innerHTML = result.name;
-      document.getElementById("address1").innerHTML = result.address1;
-      document.getElementById("address2").innerHTML = result.address2;
-      document.getElementById("latitude").innerHTML = result.latitude;
-      document.getElementById("longitude").innerHTML = result.longitude;
-      getRestaurantMenu();
-    })
-    .catch((error) => {
-      console.error(error);
-    });
-}
+  const loader = document.getElementById("loader");
+  const main = document.getElementById("main");
+  const mainDiv = document.querySelector(".hide-content");
 
-export function getRestaurantMenu(id) {
-  fetchData(
-    `https://private-anon-7231255228-pizzaapp.apiary-mock.com/restaurants/${id}/menu?category=Pizza&orderBy=rank`
-  )
-    .then((result) => {
+  let restaurantData;
+  let menuData;
+
+  loader.classList.remove("hidden");
+  main.classList.add("hidden");
+  mainDiv.classList.remove("hide-content");
+
+  Promise.all([
+    fetchData(
+      `https://private-anon-7231255228-pizzaapp.apiary-mock.com/restaurants/${id}`
+    ),
+    fetchData(
+      `https://private-anon-7231255228-pizzaapp.apiary-mock.com/restaurants/${id}/menu?category=Pizza&orderBy=rank`
+    ),
+  ])
+    .then(([restaurant, menu]) => {
+      restaurantData = restaurant;
+      menuData = menu;
+
+      console.log(restaurant);
+      console.log(menu);
+
+      document.getElementById("name").innerHTML = restaurant.name;
+      document.getElementById("address1").innerHTML = restaurant.address1;
+      document.getElementById("address2").innerHTML = restaurant.address2;
+      document.getElementById("latitude").innerHTML = restaurant.latitude;
+      document.getElementById("longitude").innerHTML = restaurant.longitude;
+
       const menuBody = document.getElementById("main");
-      document.getElementById("loader")?.remove();
-
-      result.forEach((item) => {
+      menu.forEach((item) => {
         const row = document.createElement("tr");
         const name = document.createElement("td");
         const topping = document.createElement("td");
@@ -86,11 +95,16 @@ export function getRestaurantMenu(id) {
         row.appendChild(addToCartBtn);
         menuBody.appendChild(row);
       });
+
       main.insertAdjacentHTML("beforeend", getMenuTemplate());
+      loader.classList.add("hidden");
+      main.classList.remove("hidden");
+
+      const cart = JSON.parse(localStorage.getItem("cart")) || [];
+      recalculateTotals(cart);
     })
     .catch((error) => {
-      console.error("Error getting menu:", error);
-      alert("Could not get menu. Please try again later.");
+      console.error(error);
     });
 }
 
@@ -104,8 +118,8 @@ function addToCart(item) {
     cart = JSON.parse(getCart);
   }
 
-  localStorage.setItem("cart", JSON.stringify(cart));
   cart.push(menuItem);
+  localStorage.setItem("cart", JSON.stringify(cart));
   recalculateTotals(cart);
 }
 

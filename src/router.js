@@ -7,7 +7,6 @@ import { error404Template } from "./404";
 
 import {
   getMenuTemplate,
-  getRestaurantMenu,
   getRestaurantDetailsByID,
   getRestaurantsDetailsTemplate,
 } from "./menu/menu";
@@ -36,7 +35,6 @@ const initializeRoutes = {
   404: () => {},
   "": initializeRestaurants,
   "#restaurant": getRestaurantDetailsByID,
-  "#menu": getRestaurantMenu,
   "#cartpages": displayItemsFromLocalStorage,
 };
 
@@ -44,7 +42,6 @@ export const handleLocationByPath = async (path) => {
   if (path) {
     const id = path.split("/")[1];
     window.location.hash = path;
-    console.log(window.location.hash);
     if (id) {
       const html = routeTemplates[path.split("/")[0]] || routeTemplates[404];
       document.getElementById("main").innerHTML = html;
