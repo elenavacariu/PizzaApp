@@ -1,17 +1,20 @@
 import {
   initializeRestaurants,
-  getRestaurantDetailsByID,
-  restaurantDetailsTemplate,
   getRestaurantsTemplate,
 } from "./restaurants/restaurants";
 
 import { error404Template } from "./404";
 
-import { getMenuTemplate, getRestaurantMenu } from "./menu/menu";
+import {
+  getMenuTemplate,
+  getRestaurantDetailsByID,
+  getRestaurantsDetailsTemplate,
+} from "./menu/menu";
 
-import { getCartTemplate } from "./cartPages/cartpages";
-
-import { getOrdersTemplate } from "./listOfOrders/listoforders";
+import {
+  getCartTemplate,
+  displayItemsFromLocalStorage,
+} from "./cartPages/cartpages";
 
 export const route = (event) => {
   event = event || window.event;
@@ -23,23 +26,19 @@ export const route = (event) => {
 const routeTemplates = {
   404: error404Template(),
   "": getRestaurantsTemplate(),
-  "#restaurant": restaurantDetailsTemplate(),
+  "#restaurant": getRestaurantsDetailsTemplate(),
   "#menu": getMenuTemplate(),
   "#cartpages": getCartTemplate(),
-  "#listoforders": getOrdersTemplate(),
 };
 
 const initializeRoutes = {
   404: () => {},
   "": initializeRestaurants,
   "#restaurant": getRestaurantDetailsByID,
-  "#menu": getRestaurantMenu,
-  "#cartpages": () => {},
-  "#listoforders": () => {},
+  "#cartpages": displayItemsFromLocalStorage,
 };
 
 export const handleLocationByPath = async (path) => {
-  //debugger;
   if (path) {
     const id = path.split("/")[1];
     window.location.hash = path;
@@ -53,11 +52,10 @@ export const handleLocationByPath = async (path) => {
       initializeRoutes[path]();
     }
   } else {
-    //const hash = "";
     const html = routeTemplates[""] || routeTemplates[404];
     document.getElementById("main").innerHTML = html;
     initializeRoutes[""]();
   }
 };
 
-handleLocationByPath("");
+handleLocationByPath(window.location.hash);
